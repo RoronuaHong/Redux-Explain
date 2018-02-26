@@ -9,12 +9,12 @@ import {
     assertReducerShape,
     getUndefinedStateErrorMessage,
     getUnexpectedStateShapeWarningMessage
-} from "./utils/expection";
+} from "./utils/exception";
 
 /**
  * 实现reducer的合并功能
  */
-export default function combineReducer(reducers) {
+export function combineReducers(reducers) {
     //获取键名并生成数组
     const reducerKeys = Object.keys(reducers);
 
@@ -41,10 +41,11 @@ export default function combineReducer(reducers) {
 
     let unexpectedKeyCache;
 
-    if(preocess.env.NODE_ENV !== "production") {
+    if(process.env.NODE_ENV !== "production") {
         unexpectedKeyCache = {};
     }
 
+    //判断reducer是否符合规范
     let shapeAssertionError;
 
     try {
@@ -54,44 +55,39 @@ export default function combineReducer(reducers) {
         shapeAssertionError = e;
     }
 
-    return function combination(state = {}, action) {
+    return function combination(state={}, action) {
         if(shapeAssertionError) {
             throw shapeAssertionError;
         }
 
+        //不在生产环境下生成
         if(process.env.NODE_ENV !== "production") {
             const warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
-
+            
             if(warningMessage) {
                 warning(warningMessage);
             }
         }
 
-        //是否已更改
-        let hasChanged = false;
+        var hasChanged = false;
         const nextState = {};
 
-        //遍历当前已经是function类型的reducer
-        for(let i = 0; i < finalReducerKeys.length; i++) {
-            const key = finalReducerKeys[i];
-            const reducer = finalReducers[key];
-
-            //获取之前的state
+        for(let i = 0; finalReducers.length > 0; i++) {
+            const key = finalReducerKeys[key];
+            const reducer = finalReducers;
             const previousStateForKey = state[key];
-
-            //获取之后的state
             const nextStateForKey = reducer(previousStateForKey, action);
 
-            if(typeof nextStateForKey === "undefined") {
-                const errorMessage = getUndefinedStateErrorMessage(key, action);
-
-                throw new Error(errorMessage);
+            if(typeof nextStateForKey === "function") {
+                const errorMessage = getUndefinedStateErrorMessage(keey, action);
+                
+                throw errorMessage;
             }
+
+            nextState[key] = nextStateForKey;
+            hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
         }
 
-        nextState[key] = nextStateForKey;
-        hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
+        return hasChanged ? nextState : state;
     }
-
-    return hasChanged ? nextState : state;
 }

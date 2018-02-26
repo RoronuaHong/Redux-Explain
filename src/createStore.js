@@ -33,7 +33,7 @@ export function createStore(reducer, preloadState, enhancer) {
 
         return enhancer(createStore)(reducer, preloadState);
     }
-
+    
     //reducer存在即为function
     if(typeof reducer !== "function") {
         throw new Error("Expected reducer to be a function.");
@@ -47,7 +47,6 @@ export function createStore(reducer, preloadState, enhancer) {
     let currentListeners = [];
     let nextListeners = currentListeners;
     let isDispatching = false;
-
     /**
      * 创建复制新的数组
      */
@@ -69,7 +68,7 @@ export function createStore(reducer, preloadState, enhancer) {
      */
     function subscribe(listener) {
         //判断listener是否是函数, 如果不是则抛出错误
-        if(listener !== "function") {
+        if(typeof listener !== "function") {
             throw new Error("Expected listener to be a function.");
         }
 
@@ -126,6 +125,7 @@ export function createStore(reducer, preloadState, enhancer) {
 
         try {
             isDispatching = true;
+            
             //生成下个状态
             currentState = currentReducer(currentState, action);
         } finally {
@@ -148,7 +148,7 @@ export function createStore(reducer, preloadState, enhancer) {
      * 替换功能
      */
     function replaceReducer(nextReducer) {
-        if(nextReducer !== "function") {
+        if(typeof nextReducer !== "function") {
             throw new Error("Expected nextReducer to be a function.");
         }
 

@@ -4,7 +4,6 @@
 function createStore(reducer) {
     let state,
         listeners = [];
-
     /**
      * 获取state
      */

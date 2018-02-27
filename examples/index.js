@@ -10,7 +10,7 @@ import combineReducers from "./reducers";
 const store = createStore(combineReducers);
 
 const render = () => {
-    console.log(12345);
+    console.log("订阅消息。");
 }
 
 store.subscribe(render);
@@ -24,7 +24,5 @@ store.dispatch({
 });
 
 store.dispatch({
-    type: "INCREMENT"
+    type: "action1"
 });
-
-console.log(store.getState());

@@ -12,31 +12,30 @@ import {
 } from "./utils/exception";
 
 /**
- * 实现reducer的合并功能
+ * 实现combineReducer的功能
  */
 export function combineReducers(reducers) {
     //获取键名并生成数组
     const reducerKeys = Object.keys(reducers);
 
-    //创建最终的reducer对象
+    //创建最终的reducers存放对象
     const finalReducers = {};
 
-    for(let i = 0; i < reducerKeys.length; i++) {
+    for (let i = 0; i < reducerKeys.length; i++) {
         const key = reducerKeys[i];
 
         if(process.env.NODE_ENV !== "production") {
             if(typeof reducers[key] === "undefined") {
-                warning("No reducer provided for key `${key}`");
+                warning(`No reducer provided for key "${key}"`);
             }
         }
 
-        //如果是function将其添加到finalReducers
         if(typeof reducers[key] === "function") {
             finalReducers[key] = reducers[key];
         }
     }
 
-    //获取键名并生成数组
+    //获取类型为function的reducer的键名生成数组
     const finalReducerKeys = Object.keys(finalReducers);
 
     let unexpectedKeyCache;
@@ -45,49 +44,59 @@ export function combineReducers(reducers) {
         unexpectedKeyCache = {};
     }
 
-    //判断reducer是否符合规范
     let shapeAssertionError;
 
     try {
-        //判断reducer是否符合规范
         assertReducerShape(finalReducers);
     } catch(e) {
         shapeAssertionError = e;
     }
 
+    //返回combination
     return function combination(state={}, action) {
         if(shapeAssertionError) {
             throw shapeAssertionError;
         }
 
-        //不在生产环境下生成
+        //获取相应的数据
         if(process.env.NODE_ENV !== "production") {
             const warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
-            
             if(warningMessage) {
                 warning(warningMessage);
             }
         }
 
-        var hasChanged = false;
+        //创建一个变量hasChanged判断state是否改变过
+        let hasChanged = false;
         const nextState = {};
 
-        for(let i = 0; finalReducers.length > 0; i++) {
-            const key = finalReducerKeys[key];
-            const reducer = finalReducers;
+        for(let i = 0; i < finalReducerKeys.length; i++) {
+            //获取键名
+            const key = finalReducerKeys[i];
+
+            //根据键名获取相应的reducer函数
+            const reducer = finalReducers[key];
+
+            //根据键名获取相应的state
             const previousStateForKey = state[key];
+
+            //获取下一个state
             const nextStateForKey = reducer(previousStateForKey, action);
 
-            if(typeof nextStateForKey === "function") {
-                const errorMessage = getUndefinedStateErrorMessage(keey, action);
-                
-                throw errorMessage;
+            //如果下一个状态为undefined, 抛出异常
+            if(typeof nextStateForKey === "undefined") {
+                const errorMessage = getUndefinedStateErrorMessage(key, action);
+                throw new Error(errorMessage);
             }
 
+            //存储下一个state
             nextState[key] = nextStateForKey;
+
+            //判断nextStateForKey是否与previousStateForKey相等
             hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
         }
 
+        //若改变返回nextState, 否则返回state
         return hasChanged ? nextState : state;
     }
 }

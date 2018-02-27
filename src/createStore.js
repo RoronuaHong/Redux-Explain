@@ -125,7 +125,7 @@ export function createStore(reducer, preloadState, enhancer) {
 
         try {
             isDispatching = true;
-            
+
             //生成下个状态
             currentState = currentReducer(currentState, action);
         } finally {

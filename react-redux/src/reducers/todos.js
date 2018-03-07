@@ -1,4 +1,4 @@
-import * as todoListType from "../constans/addTodo";
+import * as todoListType from "../constants/TodoList";
 
 const todos = (state = [], action) => {
     switch(action.type) {
@@ -12,15 +12,18 @@ const todos = (state = [], action) => {
                 }
             ]
         case todoListType.TOGGLE_TODO:
-            return state.map(todo => {
-                todo.id === action.id ?
+            return state.map(todo =>
+                (todo.id === action.id) ?
                     {
+                        ...todo,
                         completed: !todo.completed
                     }
                     :
                     todo
-            });
+            );
         default:
             return state;
     }
 }
+
+export default todos;

@@ -1,8 +1,8 @@
-import * as todoListType from "../constans/addTodo";
+import * as todoListType from "../constants/TodoList";
 
-//addTodo
 let nextTodoId = 0;
 
+//添加Todo的action
 export const addTodo = text => {
     return {
         type: todoListType.ADD_TODO,
@@ -11,6 +11,7 @@ export const addTodo = text => {
     }
 }
 
+//设置Todo可见性的setVisibilityFilter
 export const setVisibilityFilter = filter => {
     return {
         type: todoListType.SET_VISIBILITY_FILTER,

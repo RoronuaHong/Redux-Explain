@@ -6,6 +6,9 @@ import configureStore from "./store/configureStore";
 import App from "./components/App";
 import registerServiceWorker from './registerServiceWorker';
 
+import "./styles/css/common/reset.css";
+import "./styles/css/index.css";
+
 let store = configureStore(todoApp);
 
 render(

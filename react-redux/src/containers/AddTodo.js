@@ -15,13 +15,12 @@ let AddTodo = ({ dispatch }) => {
                         return;
                     }
 
-                    //调用action修改state的状态
                     dispatch(addTodo(input.value));
 
                     input.value = "";
                 }}
             >
-                <input
+                <input 
                     ref={node => {
                         input = node;
                     }}
@@ -33,7 +32,7 @@ let AddTodo = ({ dispatch }) => {
                 </button>
             </form>
         </React.Fragment>
-    )
+    );
 }
 
 AddTodo = connect()(AddTodo);

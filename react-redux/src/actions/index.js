@@ -20,6 +20,7 @@ export const setVisibilityFilter = filter => {
 }
 
 export const toggleTodo = id => {
+    console.log(id);
     return {
         type: todoListType.TOGGLE_TODO,
         id

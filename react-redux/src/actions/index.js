@@ -1,8 +1,19 @@
-import * as todoListType from "../constants/TodoList";
+import * as todoType from "../constants";
 
-export const addTodo = state => {
-    return {
-        type: todoListType.ADD_TODO,
-        state
-    }
-}
+let nextTodoId = 0;
+
+export const addTodo = text => ({
+    type: todoType.ADD_TODO,
+    id: nextTodoId++,
+    text
+});
+
+export const toggleTodo = id => ({
+    type: todoType.TOGGLE_TODO,
+    id
+});
+
+export const visibilityFilter = filter => ({
+    type: todoType.SET_VISIBILITY_FILTER,
+    filter
+});

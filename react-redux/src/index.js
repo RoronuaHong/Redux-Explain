@@ -9,7 +9,7 @@ import registerServiceWorker from './registerServiceWorker';
 import "./styles/css/common/reset.css";
 import "./styles/css/index.css";
 
-let store = configureStore(todoApp);
+const store = configureStore(todoApp);
 
 render(
     <Provider store={ store }>

@@ -1,11 +1,12 @@
 import { createStore } from "redux";
-import rootReducders from "../reducers";
+import rootReducer from "../reducers";
 
-const configureStore = () => {
+const configureStore = initialState => {
     const store = createStore(
-        rootReducders
+        rootReducer,
+        initialState
     );
-
+    
     return store;
 }
 

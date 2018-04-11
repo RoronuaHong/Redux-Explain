@@ -1,31 +1,29 @@
 import React from "react";
-import { connect } from "react-redux";
+import Todo from "../components/Todo";
 import getVisibleTodos from "../reducers/getVisibleTodos";
 import { toggleTodo } from "../actions";
-import Todo from "../components/Todo";
+import { connect } from "react-redux";
 
-const TodoList = ({ todos, todoClick }) => {
-    return (
-        <ul>
-             {
-                todos.map(todo => (
-                    <Todo 
-                        key={ todo.id }
-                        { ...todo }
-                        onClick={() => todoClick(todo.id)}
-                    />
-                ))
-            }
-        </ul>
-    )
-};
+const TodoList = ({ handlerClick, todos }) => (
+    <ul>
+        {
+            todos.map(todo => (
+                <Todo
+                    key={ todo.id }
+                    { ...todo }
+                    handlerClick={ () => handlerClick(todo.id) }
+                />
+            ))
+        }
+    </ul>
+);
 
 const mapStateToProps = state => ({
-    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+    todos: getVisibleTodos(state.todos, state.visibilityFilters)
 });
 
 const mapDispatchToProps = dispatch => ({
-    todoClick: id => dispatch(toggleTodo(id))
+    handlerClick: id => dispatch(toggleTodo(id))
 });
 
 export default connect(

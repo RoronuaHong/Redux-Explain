@@ -1,12 +1,12 @@
-import * as todoType from "../constants";
+import * as actionType from "../constants";
 
 const getVisibleTodos = (todos, filter) => {
     switch(filter) {
-        case todoType.SHOW_COMPLETED:
+        case actionType.SHOW_COMPLETED:
             return todos.filter(t => t.completed);
-        case todoType.SHOW_ACTIVE:
+        case actionType.SHOW_ACTIVE:
             return todos.filter(t => !t.completed);
-        case todoType.SHOW_ALL:
+        case actionType.SHOW_ALL:
         default:
             return todos;
     }

@@ -16,9 +16,12 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "cross-fetch": "^2.1.0",
     "less": "^3.0.1",
     "less-loader": "^4.0.6",
     "react-app-rewire-less": "^2.1.1",
-    "react-app-rewired": "^1.5.0"
+    "react-app-rewired": "^1.5.0",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0"
   }
 }

@@ -1,27 +1,25 @@
 import React from "react";
+import { setVisibilityFilter } from "../actions";
 import { connect } from "react-redux";
-import { visibilityFilter } from "../actions";
 
-const Link = ({ handlerClick, children, active}) => {
-    return (
-        <button
-            onClick={ handlerClick }
-            disabled={ active }
-            style={{
-                marginLeft: "4px"
-            }}
-        >
-            { children }
-        </button>
-    )
-}
+const Link = ({ children, active, onClick }) => (
+    <button
+        onClick={ onClick }
+        disabled={ active }
+        style={{
+            marginLeft: "4px"
+        }}
+    >
+        { children }
+    </button>
+);
 
 const mapStateToProps = (state, ownProps) => ({
     active: state.visibilityFilter === ownProps.filter
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    handlerClick: () => dispatch(visibilityFilter(ownProps.filter))
+    onClick: () => dispatch(setVisibilityFilter(ownProps.filter))
 });
 
 export default connect(
